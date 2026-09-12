@@ -35,9 +35,14 @@
   <div class="container py-5">
     <!-- Section 1 -->
     <section>
-      <!-- Title -->
-      <h2 class="mt-md-4 fs-2 fw-bolder title mb-4">Danh sách sản phẩm</h2>
 
+      <div class="d-flex justify-content-between align-items-center">
+        <!-- Title -->
+        <h2 class="mt-md-4 fs-2 fw-bolder title mb-4">Danh sách sản phẩm</h2>
+        <button id="cart" class="btn btn-outline-success " data-bs-toggle="offcanvas" data-bs-target="#myCart">Giỏ
+          hàng
+          <i class="fa-solid fa-cart-shopping"></i></button>
+      </div>
       <!-- List products -->
       <div class="row g-3 g-md-5" id="productList">
       </div>
@@ -58,11 +63,14 @@
                     style="max-height: 250px; object-fit: contain;">
                 </div>
                 <div class="col-12 col-md-7">
-                  <h4 class="mb-3 text-bold fw-bolder">Giá: <span id="modalProductPrice" class="productPrice"></span></h4>
-                  <p><span class="text-bold fw-bolder">Loại sản phẩm:</span> <span class="badge bg-secondary fs-6" id="modalProductType"></span>
+                  <h4 class="mb-3 text-bold fw-bolder">Giá: <span id="modalProductPrice" class="productPrice"></span>
+                  </h4>
+                  <p><span class="text-bold fw-bolder">Loại sản phẩm:</span> <span class="badge bg-secondary fs-6"
+                      id="modalProductType"></span>
                   </p>
                   <p class="text-bold fw-bolder mt-3">Mô tả: <span id="modalProductDesc" class="fw-medium"></span></p>
-                  <p class="text-bold fw-bolder mt-3">Tình Trạng: <span id="modalProductDeleted" class="fw-medium"></span></p>
+                  <p class="text-bold fw-bolder mt-3">Tình Trạng: <span id="modalProductDeleted"
+                      class="fw-medium"></span></p>
                 </div>
               </div>
             </div>
@@ -75,8 +83,40 @@
       </div>
       <!-- End Modal chi tiết sp -->
 
+      <!-- Offcanvas Giỏ Hàng -->
+      <div class="offcanvas offcanvas-end" data-bs-scroll="true" id="myCart">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title fs-3 fw-bolder text-primary">Giỏ hàng của tôi</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <hr class="border border-primary border-2 opacity-50">
+        <div class="offcanvas-body d-flex flex-column p-0">
+          <!-- Danh sách sản phẩm giỏ hàng (Cuộn tự động nếu danh sách dài) -->
+          <div id="cartBody" class="flex-grow-1 overflow-auto p-3">
+            <!-- Dữ liệu render từ JS sẽ nằm ở đây -->
+          </div>
+
+          <!-- Thanh tổng tiền & Nút bấm cố định bên dưới -->
+          <div class="border-top p-3 bg-light mt-auto">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="fs-6 fw-bold text-secondary">Tổng thanh toán:</span>
+              <span id="cartTotalPrice" class="fs-4 fw-bold text-danger">0đ</span>
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-danger w-50" onclick="clearCart()">Xóa tất cả</button>
+              <button class="btn btn-primary w-50 fw-bold" onclick="purchaseCart()" >Thanh toán</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Offcanvas giỏ hàng -->
+
     </section>
     <!-- End Section 1 -->
+
+    <!-- Alert add to cart -->
+    <div id="alert" class="alert alert-success position-fixed end-0 m-3 shadow d-none" style="top: 30px; z-index: 9999;"></div>
+    <!-- End Alert -->
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.min.js"
