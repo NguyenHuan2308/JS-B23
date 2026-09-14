@@ -33,102 +33,105 @@
   <!-- End Header -->
 
   <div class="container py-5">
-    <!-- Section 1 -->
-    <section>
 
-      <div class="d-flex justify-content-between align-items-center">
-        <!-- Title -->
-        <h2 class="mt-md-4 fs-2 fw-bolder title mb-4">Danh sách sản phẩm</h2>
-        <button id="cart" class="btn btn-outline-success " data-bs-toggle="offcanvas" data-bs-target="#myCart">Giỏ
-          hàng
-          <i class="fa-solid fa-cart-shopping"></i></button>
+    <div class="d-flex justify-content-between align-items-center">
+      <!-- Title -->
+      <h2 class="mt-md-4 fs-2 fw-bolder title mb-4">Danh sách sản phẩm</h2>
+      <button id="cart" class="btn btn-outline-success " data-bs-toggle="offcanvas" data-bs-target="#myCart">Giỏ
+        hàng
+        <i class="fa-solid fa-cart-shopping"></i></button>
+    </div>
+    <div class="input-group input-group-lg mb-3">
+      <div class="d-flex w-75">
+        <!-- <label class="input-group-text" for="searchName">Tìm kiếm: </label> -->
+        <input id="searchName" type="text" class="form-control" placeholder="Ví dụ: Iphone siêu cấp promax 18...">
       </div>
-      <div class="input-group input-group-lg mb-3">
-        <div class="d-flex w-75">
-          <!-- <label class="input-group-text" for="searchName">Tìm kiếm: </label> -->
-          <input id="searchName" type="text" class="form-control" placeholder="Ví dụ: Iphone siêu cấp promax 18...">
-        </div>
-        <div class="w-25">
-          <select class="form-select" id="dropdownType">
-          </select>
-        </div>
+      <div class="w-25">
+        <select class="form-select" id="dropdownType">
+        </select>
       </div>
-      <!-- List products -->
-      <div class="row g-3 g-md-5" id="productList">
-      </div>
-      <!-- end list products -->
+    </div>
+    <!-- List products -->
+    <div class="row g-3 g-md-5" id="productList">
+    </div>
+    <!-- end list products -->
 
-      <!-- Modal chi tiết sp -->
-      <div class="modal fade" id="productDetailModal">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title fw-bold fs-4" id="modalProductName"></h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-              <div class="row align-items-center">
-                <div class="col-12 col-md-5 text-center">
-                  <img id="modalProductImg" src="" class="img-fluid p-2"
-                    style="max-height: 250px; object-fit: contain;">
-                </div>
-                <div class="col-12 col-md-7">
-                  <h4 class="mb-3 text-bold fw-bolder">Giá: <span id="modalProductPrice" class="productPrice"></span>
-                  </h4>
-                  <p><span class="text-bold fw-bolder">Loại sản phẩm:</span> <span class="badge bg-secondary fs-6"
-                      id="modalProductType"></span>
-                  </p>
-                  <p class="text-bold fw-bolder mt-3">Mô tả: <span id="modalProductDesc" class="fw-medium"></span></p>
-                  <p class="text-bold fw-bolder mt-3">Tình Trạng: <span id="modalProductDeleted"
-                      class="fw-medium"></span></p>
-                </div>
+    <!-- Modal chi tiết sp -->
+    <div class="modal fade" id="productDetailModal">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold fs-4" id="modalProductName"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row align-items-center">
+              <div class="col-12 col-md-5 text-center">
+                <img id="modalProductImg" src="" class="img-fluid p-2" style="max-height: 250px; object-fit: contain;">
+              </div>
+              <div class="col-12 col-md-7">
+                <h4 class="mb-3 text-bold fw-bolder">Giá: <span id="modalProductPrice" class="productPrice"></span>
+                </h4>
+                <p><span class="text-bold fw-bolder">Loại sản phẩm:</span> <span class="badge bg-secondary fs-6"
+                    id="modalProductType"></span>
+                </p>
+                <p class="text-bold fw-bolder mt-3">Mô tả: <span id="modalProductDesc" class="fw-medium"></span></p>
+                <p class="text-bold fw-bolder mt-3">Tình Trạng: <span id="modalProductDeleted" class="fw-medium"></span>
+                </p>
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-              <button type="button" class="btn btn-primary">Thêm vào giỏ hàng</button>
-            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" class="btn btn-primary">Thêm vào giỏ hàng</button>
           </div>
         </div>
       </div>
-      <!-- End Modal chi tiết sp -->
+    </div>
+    <!-- End Modal chi tiết sp -->
 
-      <!-- Offcanvas Giỏ Hàng -->
-      <div class="offcanvas offcanvas-end" data-bs-scroll="true" id="myCart">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title fs-3 fw-bolder text-primary">Giỏ hàng của tôi</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    <!-- Offcanvas Giỏ Hàng -->
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" id="myCart">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title fs-3 fw-bolder text-primary">Giỏ hàng của tôi</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+      </div>
+      <hr class="border border-primary border-2 opacity-50">
+      <div class="offcanvas-body d-flex flex-column p-0">
+        <!-- Danh sách sản phẩm giỏ hàng (Cuộn tự động nếu danh sách dài) -->
+        <div id="cartBody" class="flex-grow-1 overflow-auto p-3">
+          <!-- Dữ liệu render từ JS sẽ nằm ở đây -->
         </div>
-        <hr class="border border-primary border-2 opacity-50">
-        <div class="offcanvas-body d-flex flex-column p-0">
-          <!-- Danh sách sản phẩm giỏ hàng (Cuộn tự động nếu danh sách dài) -->
-          <div id="cartBody" class="flex-grow-1 overflow-auto p-3">
-            <!-- Dữ liệu render từ JS sẽ nằm ở đây -->
-          </div>
 
-          <!-- Thanh tổng tiền & Nút bấm cố định bên dưới -->
-          <div class="border-top p-3 bg-light mt-auto">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <span class="fs-6 fw-bold text-secondary">Tổng thanh toán:</span>
-              <span id="cartTotalPrice" class="fs-4 fw-bold text-danger">0đ</span>
-            </div>
-            <div class="d-flex gap-2">
-              <button class="btn btn-outline-danger w-50" onclick="clearCart()">Xóa tất cả</button>
-              <button class="btn btn-primary w-50 fw-bold" onclick="purchaseCart()">Thanh toán</button>
-            </div>
+        <!-- Thanh tổng tiền & Nút bấm cố định bên dưới -->
+        <div class="border-top p-3 bg-light mt-auto">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fs-6 fw-bold text-secondary">Tổng thanh toán:</span>
+            <span id="cartTotalPrice" class="fs-4 fw-bold text-danger">0đ</span>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-danger w-50" onclick="clearCart()">Xóa tất cả</button>
+            <button class="btn btn-primary w-50 fw-bold" onclick="purchaseCart()">Thanh toán</button>
           </div>
         </div>
       </div>
-      <!-- End Offcanvas giỏ hàng -->
-
-    </section>
-    <!-- End Section 1 -->
+    </div>
+    <!-- End Offcanvas giỏ hàng -->
 
     <!-- Alert add to cart -->
     <div id="alert" class="alert alert-success position-fixed end-0 m-3 shadow d-none"
       style="top: 30px; z-index: 9999;"></div>
     <!-- End Alert -->
   </div>
+
+  <!-- Footer -->
+  <footer class="bg-light text-center py-4 mt-5 border-top">
+    <div class="container">
+      <p class="mb-1 fw-bold text-secondary">Store Page &copy; 2026</p>
+      <p class="text-muted small mb-0">Bài tập Capstone JS - Cybersoft</p>
+    </div>
+  </footer>
+  <!-- End Footer -->
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.min.js"
     integrity="sha512-nKXmKvJyiGQy343jatQlzDprflyB5c+tKCzGP3Uq67v+lmzfnZUi/ZT+fc6ITZfSC5HhaBKUIvr/nTLCV+7F+Q=="
@@ -137,7 +140,7 @@
     integrity="sha512-OVq+Gfa9PIjbTC0jWOccSFSp/vzkBQ5pMcbHQrNZLl+izmdFmusmAMlX4LT550ivvSnMXMEeG7CxEtjIz6Dn2Q=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  <script type="module" src="../../controller/main.js"></script>
+  <script type="module" src="../../controller/customer/main.js"></script>
 </body>
 
 </html>

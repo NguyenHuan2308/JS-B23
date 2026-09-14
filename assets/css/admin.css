@@ -1,0 +1,4 @@
+#tableProduct td, 
+#tableProduct th {
+  vertical-align: middle !important;
+}
