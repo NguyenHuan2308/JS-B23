@@ -1,4 +1,4 @@
-import { getList } from "./callAPIs.js";
+import { getList } from "../services/callAPIs.js";
 
 let productList = [];
 let cartList = [];
