@@ -2,6 +2,7 @@ import { getList } from "./callAPIs.js";
 
 let productList = [];
 let cartList = [];
+let typeProduct = [];
 
 const getCart = () => {
   const data = localStorage.getItem('cart');
@@ -73,6 +74,7 @@ const removeFromCart = (id) => {
   renderCart();
 };
 
+// Render cart
 const renderCart = () => {
   const cartBody = document.querySelector("#cartBody");
   if (!cartBody) return;
@@ -140,7 +142,7 @@ const renderCart = () => {
 
 // Hủy giỏ hàng
 const clearCart = () => {
-  if(cartList.length == 0){
+  if (cartList.length == 0) {
     showAlert("Giỏ hàng hiện tại đã trống!", 'danger');
     return;
   }
@@ -152,7 +154,7 @@ const clearCart = () => {
 
 // Thanh toán
 const purchaseCart = () => {
-  if(cartList.length == 0){
+  if (cartList.length == 0) {
     showAlert("Giỏ hàng hiện tại đang trống! Không thể thanh toán", 'danger');
     return;
   }
@@ -162,7 +164,7 @@ const purchaseCart = () => {
   renderCart();
 }
 
-
+// Render sp ra UI
 const renderProducts = (products) => {
   const content = products.map((product) =>
     `<div class="col-12 col-md-4">
@@ -183,6 +185,56 @@ const renderProducts = (products) => {
   document.querySelector('#productList').innerHTML = content;
 };
 
+// Lấy type Product
+const getTypeProduct = () => {
+  typeProduct = [];
+  const typeLower = productList.map(item => {
+    return item.type.toLowerCase();
+  });
+
+  typeLower.forEach(item => {
+    const formatType = item.charAt(0).toUpperCase() + item.slice(1);
+    if (!typeProduct.includes(formatType)) {
+      typeProduct.push(formatType);
+    }
+  })
+}
+
+// Hiện thị các Type
+const renderType = () => {
+  const ele = document.querySelector('#dropdownType');
+  if (!ele) return;
+  let content = `<option selected value="">Chọn Loại</option>`;
+  typeProduct.forEach(item => {
+    content += `<option value="${item}">${item}</option>`;
+  });
+  ele.innerHTML = content;
+}
+
+// Hàm lọc theo name và type
+const filterProducts = () => {
+  const keyword = document.querySelector('#searchName').value.trim().toLowerCase();
+  const selectedType = document.querySelector('#dropdownType').value.toLowerCase();
+
+  const filterList = productList.filter(product => {
+    const productName = product.name.toLowerCase();
+    const productType = product.type.toLowerCase();
+
+    const matchesName = productName.includes(keyword);
+    const matchesType = selectedType == "" || productType == selectedType;
+    return matchesName && matchesType; 
+  });
+
+  renderProducts(filterList);
+}
+
+document.querySelector('#searchName').addEventListener('input', () => {
+  filterProducts();
+});
+
+document.querySelector('#dropdownType').addEventListener('change', () => {
+  filterProducts();
+});
 
 window.showDetail = handleShowDetail;
 window.addToCart = addToCart;
@@ -218,6 +270,8 @@ const getDataAPI = async () => {
     productList = result.data;
     renderProducts(productList);
     renderCart();
+    getTypeProduct();
+    renderType();
   } catch (error) {
     console.log('Lỗi lấy dữ liệu API', error);
   }
