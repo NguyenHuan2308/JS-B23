@@ -38,8 +38,25 @@
     <!-- Title -->
     <div class="d-flex justify-content-between align-items-center">
       <h2 class="mt-md-4 fs-2 fw-bolder title mb-4">Danh sách sản phẩm</h2>
-      <button id="cart" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#myCart">Thêm sản phẩm mới
+      <button id="cart" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">Thêm sản phẩm
+        mới
         <i class="fa-solid fa-plus"></i></button>
+    </div>
+
+    <!-- Search and filter -->
+    <div class="input-group input-group-lg mb-3">
+      <div class="d-flex w-75">
+        <!-- <label class="input-group-text" for="searchName">Tìm kiếm: </label> -->
+        <input id="searchName" type="text" class="form-control"
+          placeholder="Nhập tên sản phẩm:(Ví dụ: Iphone 18 siêu cấp...)">
+      </div>
+      <div class="w-25">
+        <select class="form-select" id="dropdownType">
+          <option value="">Sắp xếp theo giá</option>
+          <option value="tang">Giá tăng dần</option>
+          <option value="giam">Giá giảm dần</option>
+        </select>
+      </div>
     </div>
 
     <!-- Table products -->
@@ -65,48 +82,152 @@
     </div>
 
     <!-- Modal chi tiết sp và edit-->
-    <div class="modal fade" id="productDetailModal">
+    <div class="modal fade" id="productDetailModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <p class="fw-bold fs-3 text-dark">Sửa sản phẩm</p>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content border-0 shadow-lg">
+
+          <!-- Header -->
+          <div class="modal-header bg-light py-3">
+            <h5 class="modal-title fw-bold fs-4 text-dark">
+              <i class="fa-solid fa-pen-to-square text-primary me-2"></i> Chỉnh sửa sản phẩm
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <div class="row align-items-center">
+
+          <!-- Body -->
+          <div class="modal-body p-4">
+            <div class="row align-items-center g-4">
+
+              <!-- Cột hiển thị hình ảnh -->
               <div class="col-12 col-md-5 text-center">
-                <img id="modalProductImg" src="" class="img-fluid p-2" style="max-height: 250px; object-fit: contain;">
+                <div class="p-3 border rounded bg-white shadow-sm">
+                  <img id="modalProductImg" src="" class="img-fluid rounded"
+                    style="max-height: 220px; object-fit: contain;" alt="Product Image">
+                </div>
               </div>
+
+              <!-- Cột form nhập liệu -->
               <div class="col-12 col-md-7">
-                <p class="text-bold fw-bolder mt-3">Tên sản phẩm:<input id="modalProductName"></input></p>
-                <p class="text-bold fw-bolder mt-3">Loại sản phẩm: <input id="modalProductType"></input>
-                <p class="text-bold fw-bolder mt-3">Giá: <input id="modalProductPrice" class="productPrice"></input>
-                  </h4>
-                </p>
-                <p class="text-bold fw-bolder mt-3">Mô tả: <input id="modalProductDesc"></input></p>
-                <p class="text-bold fw-bolder mt-3">Tình Trạng: <select id="modalProductDeleted">
-                    <option value="1">Còn hàng</option>
-                    <option value="0">Hết hàng</option>
-                  </select>
-                </p>
+                <div class="mb-3">
+                  <label for="modalProductName" class="form-label fw-bold  text-secondary">Tên sản phẩm</label>
+                  <input id="modalProductName" type="text" class="form-control shadow-none">
+                </div>
+
+                <div class="row g-2 mb-3">
+                  <div class="col-6">
+                    <label for="modalProductType" class="form-label fw-bold  text-secondary">Loại sản phẩm</label>
+                    <input id="modalProductType" type="text" class="form-control shadow-none">
+                  </div>
+                  <div class="col-6">
+                    <label for="modalProductPrice" class="form-label fw-bold  text-secondary">Giá (VNĐ)</label>
+                    <input id="modalProductPrice" type="text" class="form-control shadow-none productPrice">
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="modalProductDesc" class="form-label fw-bold text-secondary">Mô tả</label>
+                  <textarea id="modalProductDesc" class="form-control shadow-none" rows="2"></textarea>
+                </div>
               </div>
+
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-            <button type="button" class="btn btn-primary" id="btnUpdate">Cập nhật sản phẩm</button>
+          <!-- Footer -->
+          <div class="modal-header bg-light py-3 border-top justify-content-end gap-2">
+            <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" class="btn btn-primary px-4 fw-bold" id="btnUpdate">
+              <i class="fa-solid fa-floppy-disk me-1"></i> Lưu thay đổi
+            </button>
           </div>
         </div>
       </div>
     </div>
     <!-- End Modal chi tiết sp và edit-->
 
+    <!-- Modal ADD SP -->
+    <div class="modal fade" id="addProductModal">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+
+          <!-- Header -->
+          <div class="modal-header bg-light py-3">
+            <h5 class="modal-title fw-bold fs-4 text-dark">
+              <i class="fa-solid fa-plus text-primary me-2"></i> Thêm sản phẩm mới
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <!-- Body -->
+          <div class="modal-body p-4">
+            <div class="align-items-center">
+
+              <!-- Tên -->
+              <div class="row g-3">
+                <div class="col-4">
+                  <div class="mb-3">
+                    <label for="addProductID" class="form-label fw-bold text-dark">Nhập mã sản phẩm:</label>
+                    <input id="addProductID" type="text" class="form-control shadow-none"
+                      placeholder="Ví dụ: SP001, ID999...">
+                  </div>
+                </div>
+
+                <div class="col-8">
+                  <div class="mb-3">
+                    <label for="addProductName" class="form-label fw-bold text-dark">Tên sản phẩm</label>
+                    <input id="addProductName" type="text" class="form-control shadow-none"
+                      placeholder="Ví dụ: Iphone 99...">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Link img -->
+              <div class="mb-3">
+                <label for="addProductImg" class="form-label fw-bold text-dark">Link ảnh sản phẩm</label>
+                <input id="addProductImg" type="text" class="form-control shadow-none"
+                  placeholder="Ví dụ: https://staticg.sportskeeda.com/editor/2025/06/ffd2a-17500592548566-1920.jpg">
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-6">
+                  <label for="addProductType" class="form-label fw-bold text-dark">Loại sản phẩm</label>
+                  <input id="addProductType" type="text" class="form-control shadow-none"
+                    placeholder="Ví dụ:Laptop, Phone...">
+                </div>
+                <div class="col-6">
+                  <label for="addProductPrice" class="form-label fw-bold small text-dark">Giá (VNĐ)</label>
+                  <input id="addProductPrice" type="text" class="form-control shadow-none"
+                    placeholder="Ví dụ: 100000, 999999...">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="addProductDesc" class="form-label fw-bold small text-dark">Mô tả</label>
+                <textarea id="addProductDesc" class="form-control shadow-none" rows="2"
+                  placeholder="Mô tả về sản phẩm (Tính năng nổi bật, công nghệ sử dụng ...)"></textarea>
+              </div>
+
+            </div>
+          </div>
+          <div class="modal-header bg-light py-3 border-top justify-content-end gap-2">
+            <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" class="btn btn-primary px-4 fw-bold" id="btnAdd">
+              Thêm sản phẩm
+            </button>
+          </div>
+        </div>
+        <!-- Footer -->
+
+      </div>
+    </div>
+  </div>
+  <!-- End modal add sp-->
 
 
-    <!-- Alert add to cart -->
-    <!-- <div id="alert" class="alert alert-success position-fixed end-0 m-3 shadow d-none"
-      style="top: 30px; z-index: 9999;"></div> -->
-    <!-- End Alert -->
+
+  <!-- Alert add to cart -->
+  <div id="alert" class="alert alert-success position-fixed end-0 m-3 shadow d-none" style="top: 30px; z-index: 9999;">
+  </div>
+  <!-- End Alert -->
   </div>
   <!-- End content -->
 

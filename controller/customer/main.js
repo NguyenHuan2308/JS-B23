@@ -15,9 +15,13 @@ const setCart = () => {
   localStorage.setItem('cart', JSON.stringify(cartList));
 }
 
+let currentPro = null;
+
 const handleShowDetail = (id) => {
   const product = productList.find((item) => item.id === id);
   if (!product) return;
+
+  currentPro = product;
 
   document.getElementById('modalProductName').innerText = product.name;
   document.getElementById('modalProductImg').src = product.img;
@@ -35,7 +39,6 @@ const handleShowDetail = (id) => {
   }
 };
 
-
 const addToCart = (id) => {
   const product = productList.find((item) => item.id === id);
   if (!product) return;
@@ -52,6 +55,12 @@ const addToCart = (id) => {
   setCart();
   renderCart();
 };
+
+document.querySelector('#addInModal').addEventListener('click', () => {
+  addToCart(currentPro.id);
+  document.querySelector('#productDetailModal btn-close').click();
+});
+
 
 
 const changeQuantity = (id, amount) => {
@@ -162,6 +171,9 @@ const purchaseCart = () => {
   showAlert("Thanh toán thành công!", 'success');
   setCart();
   renderCart();
+  const offcanvasEl = document.getElementById('myCart');
+  const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasEl) || new bootstrap.Offcanvas(offcanvasEl);
+  offcanvasInstance.hide();
 }
 
 // Render sp ra UI
@@ -222,7 +234,7 @@ const filterProducts = () => {
 
     const matchesName = productName.includes(keyword);
     const matchesType = selectedType == "" || productType == selectedType;
-    return matchesName && matchesType; 
+    return matchesName && matchesType;
   });
 
   renderProducts(filterList);

@@ -1,10 +1,10 @@
-import { getList, UpdateProduct } from "../../services/callAPIs.js";
+import { getList, UpdateProduct, AddProduct, DeleteProduct } from "../../services/callAPIs.js";
 
 let productList = [];
 
-const renderProducts = () => {
+const renderProducts = (products) => {
   let ele = document.querySelector('#tableProduct');
-  let content = productList.map((item, index) => {
+  let content = products.map((item, index) => {
     return (`
         <tr class="text-center align-middle">
         <th class="fw-bold">${index + 1}</th>
@@ -12,18 +12,18 @@ const renderProducts = () => {
           <img src="${item.img}" alt="${item.name}" class="img-fluid rounded" style="max-height: 60px; object-fit: contain;">
         </td>
         <td class="fw-semibold">${item.name}</td>
-        <td class="text-start small text-truncate" style="max-width: 200px;">${item.description || 'Không có mô tả'}</td>
+        <td class="text-start text-truncate" style="max-width: 200px;" row='2'>${item.description || 'Không có mô tả'}</td>
         <td class="text-danger fw-bold">${Number(item.price).toLocaleString('vi-VN')}đ</td>
         <td><span class="badge bg-secondary">${item.type}</span></td>
         <td>
-          ${item.deleted
+          ${(String(item.deleted) === "true")
         ? '<span class="badge bg-danger">Đã xóa</span>'
         : '<span class="badge bg-success">Hoạt động</span>'}
         </td>
         <td>
           <div class="d-flex justify-content-center gap-2">
             <button class="btn btn-sm btn-warning text-white" data-bs-toggle="modal" data-bs-target="#productDetailModal" onclick="handleShowProduct('${item.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
-            <button class="btn btn-sm btn-danger" title="Xóa"><i class="fa-solid fa-trash"></i></button>
+            <button class="btn btn-sm btn-danger" title="Xóa" onclick="handleDelete('${item.id}')"><i class="fa-solid fa-trash"></i></button>
           </div>
         </td>
       </tr>
@@ -35,9 +35,13 @@ const renderProducts = () => {
 
 let currentProduct = null;
 
+// Show
 const handleShowProduct = (id) => {
   const product = productList.find((item) => item.id === id);
   if (!product) return;
+
+  console.log(product);
+
 
   currentProduct = product;
 
@@ -48,16 +52,16 @@ const handleShowProduct = (id) => {
   document.querySelector('#modalProductDesc').value = product.description || 'Không có mô tả';
 
   const element = document.querySelector('#modalProductDeleted');
-  element.value = product.deleted ? "0" : "1";
+  element.value = (product.deleted === true || product.deleted === "true") ? "true" : "false";
 };
 
+// Update
 const handleUpdateProduct = async () => {
 
   const name = document.querySelector('#modalProductName').value;
   const price = document.querySelector('#modalProductPrice').value;
   const type = document.querySelector('#modalProductType').value;
   const desc = document.querySelector('#modalProductDesc').value;
-  const deleted = document.querySelector('#modalProductDeleted').value == "1" ? false : true;
 
   const dataProduct = {
     id: currentProduct.id,
@@ -66,28 +70,146 @@ const handleUpdateProduct = async () => {
     img: currentProduct.img,
     description: desc,
     type: type,
-    deleted: deleted,
   }
+  console.log(dataProduct);
+
   try {
-    await UpdateProduct(currentProduct.id, dataProduct);
+    const res = await UpdateProduct(currentProduct.id, dataProduct);
     getDataAPI();
-    document.querySelector('.btn-close').click();
+    document.querySelector('#productDetailModal .btn-close').click();
+    showAlert("Cập nhật thành công!!")
   } catch (error) {
     console.log("Lỗi Update!!", error);
   }
+  getDataAPI();
 }
 
 document.querySelector('#btnUpdate').addEventListener('click', () => {
   handleUpdateProduct();
 })
 
+// Tìm kiếm và sắp xếp
+const filterProduct = () => {
+  const keyword = document.querySelector('#searchName').value.trim().toLowerCase();
+  const sortType = document.querySelector('#dropdownType').value;
+
+  let resultList = productList.filter((product) => {
+    return product.name.toLowerCase().includes(keyword);
+  });
+
+  if (sortType === 'tang') {
+    resultList.sort((a, b) => Number(a.price) - Number(b.price));
+  } else if (sortType === 'giam') {
+    resultList.sort((a, b) => Number(b.price) - Number(a.price));
+  }
+
+  renderProducts(resultList);
+}
+
+document.querySelector('#searchName').addEventListener('input', filterProduct);
+document.querySelector('#dropdownType').addEventListener('change', filterProduct);
+
+// Hàm show thông báo
+let alertTimeout;
+const showAlert = (message, type = 'success') => {
+  const alertMes = document.getElementById("alert");
+  if (!alertMes) return;
+  alertMes.innerHTML = message;
+
+  clearTimeout(alertTimeout);
+
+  alertMes.className = `alert alert-${type} position-fixed end-0 mt-5 shadow`;
+  alertMes.innerHTML = `${message}`;
+
+  alertTimeout = setTimeout(() => {
+    alertMes.classList.add("d-none");
+    alertMes.innerHTML = '';
+  }, 3000);
+};
+
+// Reset form add
+function resetModalForm() {
+  document.getElementById('addProductID').value = '';
+  document.getElementById('addProductName').value = '';
+  document.getElementById('addProductImg').value = '';
+  document.getElementById('addProductType').value = '';
+  document.getElementById('addProductPrice').value = '';
+  document.getElementById('addProductDesc').value = '';
+}
+
+// Reset form khi thoát ra ngoài form add
+const addModalElement = document.getElementById('addProductModal');
+addModalElement.addEventListener('hidden.bs.modal', function () {
+  resetModalForm();
+});
+
+// Add product
+const handleAdd = async () => {
+  const id = document.querySelector('#addProductID').value;
+  const name = document.querySelector('#addProductName').value;
+  const price = document.querySelector('#addProductPrice').value;
+  const img = document.querySelector('#addProductImg').value;
+  const description = document.querySelector('#addProductDesc').value;
+  const type = document.querySelector('#addProductType').value;
+
+  const data = {
+    id: id,
+    name: name,
+    price: price,
+    img: img,
+    description: description,
+    type: type,
+    deleted: false
+  }
+
+  try {
+    await AddProduct(data);
+    await getDataAPI();
+    showAlert("Thêm sản phẩm mới thành công");
+
+    resetModalForm();
+    const modalEl = document.getElementById('addProductModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    modalInstance.hide();
+
+  } catch (error) {
+    console.log("Lỗi Add!!", error);
+  }
+}
+
+// Hàm xóa sp
+const handleDelete = async (id) => {
+  const isConfirm = confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?");
+  if (!isConfirm) return;
+  const productToDelete = productList.find((item) => item.id === id);
+  if (!productToDelete) {
+    showAlert("Không tìm thấy sản phẩm cần xóa!", "danger");
+    return;
+  }
+
+  productToDelete.deleted = true;
+
+  try {
+    await DeleteProduct(id, productToDelete);
+    await getDataAPI();
+    console.log(productToDelete);
+    showAlert("Xóa sản phẩm thành công!", "success");
+  } catch (error) {
+    console.log("Lỗi Delete!!", error);
+    showAlert("Xóa sản phẩm thất bại!", "danger");
+  }
+}
+
+document.querySelector('#btnAdd').addEventListener('click', handleAdd);
+
+window.handleDelete = handleDelete;
 window.handleShowProduct = handleShowProduct;
 
 const getDataAPI = async () => {
   try {
     const result = await getList();
     productList = result.data;
-    renderProducts();
+    renderProducts(result.data);
   } catch (error) {
     console.log('Lỗi lấy dữ liệu API', error);
   }
