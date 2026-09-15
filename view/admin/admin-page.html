@@ -67,10 +67,9 @@
             <th scope="col" style="width: 5%;">STT</th>
             <th scope="col" style="width: 10%;">Hình ảnh</th>
             <th scope="col" style="width: 20%;">Tên sản phẩm</th>
-            <th scope="col" style="width: 25%;">Mô tả</th>
+            <th scope="col" style="width: 35%;">Mô tả</th>
             <th scope="col" style="width: 12%;">Giá</th>
             <th scope="col" style="width: 10%;">Loại</th>
-            <th scope="col" style="width: 10%;">Trạng thái</th>
             <th scope="col" style="width: 8%;">Thao tác</th>
           </tr>
         </thead>
@@ -111,22 +110,32 @@
                 <div class="mb-3">
                   <label for="modalProductName" class="form-label fw-bold  text-secondary">Tên sản phẩm</label>
                   <input id="modalProductName" type="text" class="form-control shadow-none">
+                  <div id="modalProductNameValidate" class="small text-danger d-none mt-2"></div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="modalProductImgLink" class="form-label fw-bold  text-secondary">Link ảnh: </label>
+                  <input id="modalProductImgLink" type="text" class="form-control shadow-none">
+                  <div id="modalProductImgValidate" class="small text-danger d-none mt-2"></div>
                 </div>
 
                 <div class="row g-2 mb-3">
                   <div class="col-6">
                     <label for="modalProductType" class="form-label fw-bold  text-secondary">Loại sản phẩm</label>
                     <input id="modalProductType" type="text" class="form-control shadow-none">
+                    <div id="modalProductTypeValidate" class="small text-danger d-none mt-2"></div>
                   </div>
                   <div class="col-6">
                     <label for="modalProductPrice" class="form-label fw-bold  text-secondary">Giá (VNĐ)</label>
                     <input id="modalProductPrice" type="text" class="form-control shadow-none productPrice">
+                    <div id="modalProductPriceValidate" class="small text-danger d-none mt-2"></div>
                   </div>
                 </div>
 
                 <div class="mb-3">
                   <label for="modalProductDesc" class="form-label fw-bold text-secondary">Mô tả</label>
                   <textarea id="modalProductDesc" class="form-control shadow-none" rows="2"></textarea>
+                  <div id="modalProductDescValidate" class="small text-danger d-none mt-2"></div>
                 </div>
               </div>
 
@@ -168,6 +177,7 @@
                     <label for="addProductID" class="form-label fw-bold text-dark">Nhập mã sản phẩm:</label>
                     <input id="addProductID" type="text" class="form-control shadow-none"
                       placeholder="Ví dụ: SP001, ID999...">
+                    <div id="addProductIDValidate" class="small text-danger d-no"></div>
                   </div>
                 </div>
 
@@ -176,6 +186,7 @@
                     <label for="addProductName" class="form-label fw-bold text-dark">Tên sản phẩm</label>
                     <input id="addProductName" type="text" class="form-control shadow-none"
                       placeholder="Ví dụ: Iphone 99...">
+                    <div id="addProductNameValidate" class="small text-danger d-none mt-2"></div>
                   </div>
                 </div>
               </div>
@@ -185,6 +196,7 @@
                 <label for="addProductImg" class="form-label fw-bold text-dark">Link ảnh sản phẩm</label>
                 <input id="addProductImg" type="text" class="form-control shadow-none"
                   placeholder="Ví dụ: https://staticg.sportskeeda.com/editor/2025/06/ffd2a-17500592548566-1920.jpg">
+                <div id="addProductImgValidate" class="small text-danger d-none mt-2"></div>
               </div>
 
               <div class="row g-3 mb-3">
@@ -192,11 +204,13 @@
                   <label for="addProductType" class="form-label fw-bold text-dark">Loại sản phẩm</label>
                   <input id="addProductType" type="text" class="form-control shadow-none"
                     placeholder="Ví dụ:Laptop, Phone...">
+                  <div id="addProductTypeValidate" class="small text-danger d-none mt-2"></div>
                 </div>
                 <div class="col-6">
                   <label for="addProductPrice" class="form-label fw-bold small text-dark">Giá (VNĐ)</label>
                   <input id="addProductPrice" type="text" class="form-control shadow-none"
                     placeholder="Ví dụ: 100000, 999999...">
+                  <div id="addProductPriceValidate" class="small text-danger d-none mt-2"></div>
                 </div>
               </div>
 
@@ -204,6 +218,7 @@
                 <label for="addProductDesc" class="form-label fw-bold small text-dark">Mô tả</label>
                 <textarea id="addProductDesc" class="form-control shadow-none" rows="2"
                   placeholder="Mô tả về sản phẩm (Tính năng nổi bật, công nghệ sử dụng ...)"></textarea>
+                <div id="addProductDescValidate" class="small text-danger d-none mt-2"></div>
               </div>
 
             </div>

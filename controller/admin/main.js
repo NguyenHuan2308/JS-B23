@@ -1,4 +1,5 @@
 import { getList, UpdateProduct, AddProduct, DeleteProduct } from "../../services/callAPIs.js";
+import { validateDesc, validateId, validateImg, validateName, validatePrice, validateType } from "../../validation/validation.js";
 
 let productList = [];
 
@@ -14,12 +15,7 @@ const renderProducts = (products) => {
         <td class="fw-semibold">${item.name}</td>
         <td class="text-start text-truncate" style="max-width: 200px;" row='2'>${item.description || 'Không có mô tả'}</td>
         <td class="text-danger fw-bold">${Number(item.price).toLocaleString('vi-VN')}đ</td>
-        <td><span class="badge bg-secondary">${item.type}</span></td>
-        <td>
-          ${(String(item.deleted) === "true")
-        ? '<span class="badge bg-danger">Đã xóa</span>'
-        : '<span class="badge bg-success">Hoạt động</span>'}
-        </td>
+        <td><span class="badge bg-success">${item.type}</span></td>
         <td>
           <div class="d-flex justify-content-center gap-2">
             <button class="btn btn-sm btn-warning text-white" data-bs-toggle="modal" data-bs-target="#productDetailModal" onclick="handleShowProduct('${item.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -47,41 +43,51 @@ const handleShowProduct = (id) => {
 
   document.querySelector('#modalProductName').value = product.name;
   document.querySelector('#modalProductImg').src = product.img;
+  document.querySelector('#modalProductImgLink').value = product.img;
   document.querySelector('#modalProductPrice').value = product.price;
-  document.querySelector('#modalProductType').value = product.type || 'Chưa phân loại';
-  document.querySelector('#modalProductDesc').value = product.description || 'Không có mô tả';
-
-  const element = document.querySelector('#modalProductDeleted');
-  element.value = (product.deleted === true || product.deleted === "true") ? "true" : "false";
+  document.querySelector('#modalProductType').value = product.type;
+  document.querySelector('#modalProductDesc').value = product.description;
 };
 
 // Update
 const handleUpdateProduct = async () => {
 
+  const img = document.querySelector('#modalProductImgLink').value;
   const name = document.querySelector('#modalProductName').value;
   const price = document.querySelector('#modalProductPrice').value;
   const type = document.querySelector('#modalProductType').value;
   const desc = document.querySelector('#modalProductDesc').value;
 
-  const dataProduct = {
-    id: currentProduct.id,
-    name: name,
-    price: price,
-    img: currentProduct.img,
-    description: desc,
-    type: type,
-  }
-  console.log(dataProduct);
 
-  try {
-    const res = await UpdateProduct(currentProduct.id, dataProduct);
+  const checkName = validateName(name, 'modalProductNameValidate', "Tên không được để trống");
+  const checkImg = validateImg(img, 'modalProductImgValidate', "Hình ảnh không được để trống!");
+  const checkType = validateType(type, 'modalProductTypeValidate', "Thể loại không được để trống!");
+  const checkPrice = validatePrice(price, 'modalProductPriceValidate', "Giá phải là số và không được để trống!");
+  const checkDesc = validateDesc(desc, 'modalProductDescValidate', "Mô tả không được để trống!");
+
+  const isValid = checkName && checkImg && checkType && checkPrice && checkDesc;
+
+  if (isValid) {
+    const dataProduct = {
+      id: currentProduct.id,
+      name: name,
+      price: price,
+      img: img,
+      description: desc,
+      type: type,
+    }
+    console.log(dataProduct);
+
+    try {
+      const res = await UpdateProduct(currentProduct.id, dataProduct);
+      getDataAPI();
+      document.querySelector('#productDetailModal .btn-close').click();
+      showAlert("Cập nhật thành công!!")
+    } catch (error) {
+      console.log("Lỗi Update!!", error);
+    }
     getDataAPI();
-    document.querySelector('#productDetailModal .btn-close').click();
-    showAlert("Cập nhật thành công!!")
-  } catch (error) {
-    console.log("Lỗi Update!!", error);
   }
-  getDataAPI();
 }
 
 document.querySelector('#btnUpdate').addEventListener('click', () => {
@@ -152,28 +158,39 @@ const handleAdd = async () => {
   const description = document.querySelector('#addProductDesc').value;
   const type = document.querySelector('#addProductType').value;
 
-  const data = {
-    id: id,
-    name: name,
-    price: price,
-    img: img,
-    description: description,
-    type: type,
-    deleted: false
-  }
+  const checkId = validateId(id, 'addProductIDValidate', 'Mã sản phẩm không được để trống');
+  const checkName = validateName(name, 'addProductNameValidate', "Tên không được để trống");
+  const checkImg = validateImg(img, 'addProductImgValidate', "Hình ảnh không được để trống!");
+  const checkType = validateType(type, 'addProductTypeValidate', "Thể loại không được để trống!");
+  const checkPrice = validatePrice(price, 'addProductPriceValidate', "Giá phải là số và không được để trống!");
+  const checkDesc = validateDesc(description, 'addProductDescValidate', "Mô tả không được để trống!");
 
-  try {
-    await AddProduct(data);
-    await getDataAPI();
-    showAlert("Thêm sản phẩm mới thành công");
+  const isValid = checkId && checkName && checkImg && checkType && checkPrice && checkDesc;
+  
+  if (isValid) {
+    const data = {
+      id: id,
+      name: name,
+      price: price,
+      img: img,
+      description: description,
+      type: type,
+      deleted: false
+    }
 
-    resetModalForm();
-    const modalEl = document.getElementById('addProductModal');
-    const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-    modalInstance.hide();
+    try {
+      await AddProduct(data);
+      await getDataAPI();
+      showAlert("Thêm sản phẩm mới thành công");
 
-  } catch (error) {
-    console.log("Lỗi Add!!", error);
+      resetModalForm();
+      const modalEl = document.getElementById('addProductModal');
+      const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+      modalInstance.hide();
+
+    } catch (error) {
+      console.log("Lỗi Add!!", error);
+    }
   }
 }
 
